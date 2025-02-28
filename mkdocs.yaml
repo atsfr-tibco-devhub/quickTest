@@ -1,0 +1,8 @@
+site_name: "quickTest"
+site_description: "A service that calls a backend customer service using Flogo"
+
+nav:
+  - Introduction: README.md
+
+plugins:
+  - techdocs-core

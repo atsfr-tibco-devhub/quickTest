@@ -1,0 +1,92 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: tibco-customers
+  description: An organization that manage customers
+  tags:
+    - customers
+    - platform
+spec:
+  type: organization
+  profile:
+    displayName: TIBCO CRM
+    email: info@tibco.com
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: customers
+  description: Everything related to customers
+  tags:
+    - customers
+    - platform
+spec:
+  owner: tibco-customers
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: quickTest-system
+  description: 'A system to manage customers'
+  annotations:
+    github.com/project-slug: atsfr-tibco-devhub/quickTest
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - customers
+    - platform
+spec:
+  owner: tibco-customers
+  domain: insurance
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "quickTest"
+  description: "A service that calls a backend customer service using Flogo"
+  tags: 
+    - customers
+    - platform
+  links:
+    - title: Flogo Documentation
+      url: https://docs.tibco.com/products/tibco-flogo-enterprise
+    - title: VSCode Editor (File)
+      url: vscode://file//Users/dev/git/quickTest/src/customer-api.flogo
+    - title: VSCode Editor (Folder)
+      url: vscode://file//Users/dev/git/quickTest/src
+  tibcoPlatformApps:
+    - appType: Flogo
+      appName: quickTest
+      dataPlaneName: dp-aks
+      dpId: cq35s2ijcp26pefl1dmg
+      capabilityInstanceId: cqgcsnijcp26pefl1g20
+      appId: ct3opn31glmt0gsesehg
+  annotations:
+    jenkins.io/job-full-name: quickTestJob
+    github.com/project-slug: atsfr-tibco-devhub/
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  system: quickTest-system
+  lifecycle: development
+  owner: tibco-customers
+  providesApis: ['quickTest-api']
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: 'quickTest-api'
+  description: 'An API that manages customers'
+  tags:
+    - customers
+    - rest
+    - platform
+spec:
+  type: openapi
+  lifecycle: development
+  system: quickTest-system
+  owner: tibco-customers
+  apiConsumedBy:
+    []
+  definition:
+    $text: "./spec/customer.json"
